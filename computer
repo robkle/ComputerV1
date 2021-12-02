@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+import sys
+from calc import Calc
+
+def main():
+	new = Calc(str(sys.argv[1]))
+	new.printequ()
+	new.solve()
+
+if __name__ == "__main__":
+	main()
