@@ -8,8 +8,9 @@ class ParseArg:
 
 	def process(self, av):
 		raw = av.replace(" ", "").split("=")
+		self.trim(raw)
 		if len(raw) != 2:
-			sys.exit('Input contains invalid equation!')
+			sys.exit('Input contains an invalid equation!')
 		self.parse(raw[0], 1)
 		self.parse(raw[1], -1)
 
@@ -17,8 +18,9 @@ class ParseArg:
 		val = 1.0
 		sign = 1
 		parts = re.split('([+-]+)', side)
+		self.trim(parts)
 		if re.match('[+-]+', parts[-1]):
-			sys.exit('Input contains invalid equation!')
+			sys.exit('Input contains an invalid equation!')
 		for i in parts:
 			if re.match('[+-]+', i):
 				sign = -1 if i.count('-') % 2 == 1 else 1
@@ -33,14 +35,19 @@ class ParseArg:
 					if (nums[0] != ''):
 						val = float(nums[0])
 					x = 1
-				elif re.match('\d+(\.?\d+)*', i):
+				elif re.match('^(\d+(\.?\d+)*)$', i):
 					val = float(i)
 					x = 0
 				else:
-					sys.exit('Input contains invalid equation!')
+					sys.exit('Input contains an invalid equation!')
 				self.update(val * sign, x, sv)
 				val = 1
 
+	def trim(self, lst):
+		for i in lst:
+			if i == '':
+				lst.remove(i)
+	
 	def update(self, val, x, sv):
 		if (x in self.equ):
 			self.equ[x] += val * sv
